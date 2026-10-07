@@ -36,7 +36,7 @@ The main states of the window (Windows 11, dark theme; the window follows the sy
   </tr>
   <tr>
     <td align="center"><img src="docs/screenshots/main-done.png" alt="Transfer done"><br><b>Done</b><br>The file is saved and the transfer is removed from the database.</td>
-    <td align="center" colspan="2"><img src="docs/screenshots/settings.png" alt="Settings window" width="420"><br><b>Settings</b><br>Connection string, User ID (generate / copy), always-on-top and a connection test that also creates the tables. (Values shown are placeholders.)</td>
+    <td align="center" colspan="2"><img src="docs/screenshots/settings.png" alt="Settings window" width="420"><br><b>Settings</b><br>Connection string, User ID (generate / copy), always-on-top, peer and SQL command timeouts, and a connection test that also creates the tables. (Values shown are placeholders.)</td>
   </tr>
 </table>
 
@@ -120,7 +120,7 @@ Settings are saved in `config.json` next to the exe:
 | `CommandTimeoutSeconds` | Timeout of every SQL command, including each 1 MB chunk upload/download (default `60`, allowed 5–600). Raise on a slow link. |
 | `WindowX`, `WindowY` | Last window position |
 
-The two timeout fields are not shown in the settings window; edit `config.json` while the app is closed (they are written out the first time you press Save). The *login* timeout is part of the connection string (`Connect Timeout=30`). Changes apply on the next start.
+Both timeouts are also in the settings window (*Peer timeout* and *SQL command timeout*) and take effect as soon as you press Save. The *login* timeout is part of the connection string (`Connect Timeout=30`).
 
 You can run several instances from the same folder; each gets its own identity at start-up.
 
@@ -173,8 +173,8 @@ Stack: C#, .NET 8, WinUI 3 (Windows App SDK 1.8), Dapper, Microsoft.Data.SqlClie
 | Symptom | Likely cause |
 |---|---|
 | **No DB connection** (hover the status for the error) | Wrong connection string, server unreachable, missing permissions. On Docker use `127.0.0.1` rather than `localhost`. |
-| **Waiting for peer** on both | Different User IDs, different databases, or the other side isn't running or can't reach the DB. On a slow or flaky link also try a larger `PeerTimeoutSeconds`. |
-| Transfer fails with a timeout error | Slow link: raise `CommandTimeoutSeconds` in `config.json`. |
+| **Waiting for peer** on both | Different User IDs, different databases, or the other side isn't running or can't reach the DB. On a slow or flaky link also try a larger *Peer timeout* in settings. |
+| Transfer fails with a timeout error | Slow link: raise *SQL command timeout* in settings. |
 | **Channel busy** | Two other instances already use this User ID. |
 | "The app folder is not writable" | Move the folder somewhere you can write (config is stored next to the exe). |
 | App doesn't start at all | Missing .NET 8 Desktop Runtime or Windows App SDK 1.8 runtime. |
