@@ -30,7 +30,8 @@ public sealed class ConfigStore(string path)
         }
         catch (Exception ex) when (ex is IOException or JsonException)
         {
-            // Corrupted config: start from defaults.
+            // Unreadable (corrupted, or being written by another instance): use defaults, but never overwrite the file.
+            return new AppConfig();
         }
 
         var config = new AppConfig();
