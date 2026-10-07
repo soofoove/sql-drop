@@ -221,6 +221,11 @@ public sealed partial class MainWindow : Window
                 text = "Incoming file is being uploaded…";
                 progress = Ratio(transfer.ChunksReady, transfer.ChunkCount);
                 break;
+            case { Status: TransferStatus.Ready, Role: TransferRole.Receiving }:
+                // We just pressed Accept; the status in the DB view catches up on the next poll.
+                text = "Receiving…";
+                progress = _localProgress;
+                break;
             case { Status: TransferStatus.Ready }:
                 text = "Waiting for the other device to accept";
                 break;
