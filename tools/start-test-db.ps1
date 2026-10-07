@@ -11,7 +11,7 @@
     Container name. Default: sqldrop-test-db
 
 .PARAMETER Port
-    Host port mapped to SQL Server's 1433. Default: 14333
+    Host port mapped to SQL Server's 1433, bound to 127.0.0.1 only (the test password is public). Default: 14333
 
 .PARAMETER Password
     SA password (must satisfy SQL Server's complexity rules). Default: the one the tests expect.
@@ -55,7 +55,7 @@ if (-not (Test-ContainerExists)) {
     Write-Host "Creating container '$Name' (the first run pulls the SQL Server image, which can take a few minutes)..."
     docker run -d --name $Name `
         -e ACCEPT_EULA=Y -e "MSSQL_SA_PASSWORD=$Password" `
-        -p "${Port}:1433" `
+        -p "127.0.0.1:${Port}:1433" `
         mcr.microsoft.com/mssql/server:2022-latest | Out-Null
     if ($LASTEXITCODE -ne 0) { throw "docker run failed (exit code $LASTEXITCODE)." }
 }
