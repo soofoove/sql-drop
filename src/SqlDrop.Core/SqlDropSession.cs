@@ -35,10 +35,10 @@ public sealed class SqlDropSession : IAsyncDisposable
 
     public SqlDropSession(string connectionString, string userId, Guid instanceId, SessionOptions? options = null)
     {
-        _db = new SqlDropDb(connectionString);
+        _options = options ?? new SessionOptions();
+        _db = new SqlDropDb(connectionString, (int)_options.CommandTimeout.TotalSeconds);
         _crypto = new ChannelCrypto(userId);
         _instanceId = instanceId;
-        _options = options ?? new SessionOptions();
     }
 
     /// <summary>Starts the heartbeat loop. DB errors (including schema creation) are retried and reported via <see cref="Connection"/>.</summary>

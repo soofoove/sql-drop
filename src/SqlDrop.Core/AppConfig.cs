@@ -7,6 +7,12 @@ public sealed class AppConfig
     public string ConnectionString { get; set; } = "";
     public string UserId { get; set; } = "";
     public bool AlwaysOnTop { get; set; }
+
+    /// <summary>How long (seconds) the other instance may stay silent before it is considered gone. Raise on unstable links.</summary>
+    public int PeerTimeoutSeconds { get; set; } = 5;
+
+    /// <summary>Timeout (seconds) of every SQL command, including chunk uploads/downloads. Raise on slow links.</summary>
+    public int CommandTimeoutSeconds { get; set; } = 60;
     public int? WindowX { get; set; }
     public int? WindowY { get; set; }
 

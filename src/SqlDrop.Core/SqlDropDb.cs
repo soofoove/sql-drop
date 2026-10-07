@@ -4,9 +4,8 @@ using Microsoft.Data.SqlClient;
 namespace SqlDrop.Core;
 
 /// <summary>All SQL used by the app. Time is always taken from the DB server clock.</summary>
-public sealed class SqlDropDb(string connectionString)
+public sealed class SqlDropDb(string connectionString, int commandTimeoutSeconds = 60)
 {
-    private const int CommandTimeoutSeconds = 60;
     private const string Active = "(1, 2, 3)";
 
     private const string SchemaSql = """
@@ -56,8 +55,8 @@ public sealed class SqlDropDb(string connectionString)
         return conn;
     }
 
-    private static CommandDefinition Cmd(string sql, object? param, CancellationToken ct) =>
-        new(sql, param, commandTimeout: CommandTimeoutSeconds, cancellationToken: ct);
+    private CommandDefinition Cmd(string sql, object? param, CancellationToken ct) =>
+        new(sql, param, commandTimeout: commandTimeoutSeconds, cancellationToken: ct);
 
     public async Task EnsureSchemaAsync(CancellationToken ct = default)
     {

@@ -40,7 +40,7 @@ A utility for transferring files between two machines of the same user through a
 ### 3.3 Presence (heartbeat)
 - FR-10. Each instance has an `InstanceId` (random GUID generated on every process start, **never persisted** — two windows sharing one config, or a copied app folder, must still be distinct peers) and once per second runs `UPDATE Peers SET LastSeen = SYSUTCDATETIME()` (the row is created via `MERGE`/upsert on start).
 - FR-11. The same round trip (or the next one) reads the other instance's `LastSeen` for the same channel. Time is compared **using the DB server clock** (`DATEDIFF(MILLISECOND, LastSeen, SYSUTCDATETIME())`), not client clocks.
-- FR-12. Threshold: a peer is alive if its `LastSeen` is not older than **5 s** (configurable constant).
+- FR-12. Threshold: a peer is alive if its `LastSeen` is not older than **5 s** (configurable via `PeerTimeoutSeconds` in `config.json`, 2–300 s). The SQL command timeout is likewise configurable (`CommandTimeoutSeconds`, default 60 s, 5–600 s); the login timeout is set in the connection string.
 - FR-13. A DB error on heartbeat → status "No DB connection"; retries continue at the same interval; the status recovers automatically.
 - FR-14. On graceful shutdown the app deletes its own `Peers` row so the peer sees the disconnect immediately.
 - FR-15. If a live instance with a different InstanceId already exists in the channel, there are exactly two. A third active instance gets an error status "Channel busy". Rule: at most 2 live peers.

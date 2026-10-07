@@ -11,7 +11,7 @@ Drop a file on one machine, press **Accept** on the other, pick a folder. The fi
 - Both machines are paired by one shared **User ID** (random, generated in the app)
 - Files are encrypted end to end with **AES-256-GCM**; the key is derived from the User ID and never stored in the DB
 - Either side can send; one file at a time; accept / reject on the receiving side; cancel from either side
-- Presence via a 1-second heartbeat in the DB; a peer is considered gone after 5 seconds of silence
+- Presence via a 1-second heartbeat in the DB; a peer is considered gone after 5 seconds of silence (configurable)
 - Everything is removed from the DB after a successful transfer; abandoned transfers expire after 24 hours
 - **Portable:** config and everything else live next to the exe, nothing is written to the registry, `%APPDATA%` or `%TEMP%`
 
@@ -91,7 +91,11 @@ Settings are saved in `config.json` next to the exe:
 | `ConnectionString` | SQL Server connection string |
 | `UserId` | Shared pairing id and encryption secret |
 | `AlwaysOnTop` | Keep the window above others |
+| `PeerTimeoutSeconds` | How long the other instance may stay silent before it counts as gone (default `5`, allowed 2–300). Raise on an unstable network. |
+| `CommandTimeoutSeconds` | Timeout of every SQL command, including each 1 MB chunk upload/download (default `60`, allowed 5–600). Raise on a slow link. |
 | `WindowX`, `WindowY` | Last window position |
+
+The two timeout fields are not shown in the settings window; edit `config.json` while the app is closed (they are written out the first time you press Save). The *login* timeout is part of the connection string (`Connect Timeout=30`). Changes apply on the next start.
 
 You can run several instances from the same folder; each gets its own identity at start-up.
 
@@ -144,7 +148,8 @@ Stack: C#, .NET 8, WinUI 3 (Windows App SDK 1.8), Dapper, Microsoft.Data.SqlClie
 | Symptom | Likely cause |
 |---|---|
 | **No DB connection** (hover the status for the error) | Wrong connection string, server unreachable, missing permissions. On Docker use `127.0.0.1` rather than `localhost`. |
-| **Waiting for peer** on both | Different User IDs, different databases, or the other side isn't running or can't reach the DB. |
+| **Waiting for peer** on both | Different User IDs, different databases, or the other side isn't running or can't reach the DB. On a slow or flaky link also try a larger `PeerTimeoutSeconds`. |
+| Transfer fails with a timeout error | Slow link: raise `CommandTimeoutSeconds` in `config.json`. |
 | **Channel busy** | Two other instances already use this User ID. |
 | "The app folder is not writable" | Move the folder somewhere you can write (config is stored next to the exe). |
 | App doesn't start at all | Missing .NET 8 Desktop Runtime or Windows App SDK 1.8 runtime. |

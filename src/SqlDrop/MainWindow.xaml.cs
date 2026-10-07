@@ -116,7 +116,7 @@ public sealed partial class MainWindow : Window
 
         if (_startupError is null && config.IsConfigured)
         {
-            var session = new SqlDropSession(config.ConnectionString, config.UserId, _instanceId);
+            var session = new SqlDropSession(config.ConnectionString, config.UserId, _instanceId, SessionOptions.FromConfig(config));
             session.ConnectionChanged += _ => Dispatch(Render);
             session.TransferChanged += _ => Dispatch(Render);
             session.TransferFinished += (outcome, name) => Dispatch(() => OnTransferFinished(outcome, name));
