@@ -113,8 +113,8 @@ The app runs in a well-trusted environment, so security is deliberately kept min
 - NFR-3. The UI never blocks: all DB and file work is async, UI updates go through `DispatcherQueue`.
 - NFR-4. Speed is bound by the link to the DB; target: 100 MB over LAN in a reasonable time (tens of seconds), measured during implementation.
 - NFR-5. All UI text is in English.
-- NFR-6. File log in `logs\` next to the executable (no secrets), size-capped with rotation (e.g. 1 MB × 3 files).
-- NFR-7. **Portability:** no installer, no registry writes, no files outside the app folder (config, logs, window position, last-used folder, temp files all live next to the exe). Deleting the folder leaves nothing behind in the OS. No autostart, no shell integration, no `%APPDATA%`/`%LOCALAPPDATA%`/`%TEMP%` usage by the app itself (the `.part` file is written in the destination folder the user chose).
+- NFR-6. *(Not implemented in v0.1.)* File log in `logs\` next to the executable (no secrets), size-capped with rotation (e.g. 1 MB × 3 files).
+- NFR-7. **Portability:** no installer, no registry writes, no files outside the app folder (config and window position live next to the exe; the app itself uses no registry, `%APPDATA%`, `%LOCALAPPDATA%` or `%TEMP%` — only the OS file pickers keep their own recent-folder history). Deleting the folder leaves nothing behind in the OS. No autostart, no shell integration, no `%APPDATA%`/`%LOCALAPPDATA%`/`%TEMP%` usage by the app itself (the `.part` file is written in the destination folder the user chose).
 - NFR-8. If the app folder is not writable (e.g. `Program Files`), the app shows a clear error on start instead of silently falling back to another location.
 
 ## 7. Acceptance criteria (end-to-end)
@@ -145,4 +145,4 @@ The app runs in a well-trusted environment, so security is deliberately kept min
 4. Presence (heartbeat/status) + status bar.
 5. Transfer: send, receive, cleanup, cancel/reject.
 6. Main window: drag-and-drop, accept card, progress.
-7. E2E verification per section 7 (two app copies against SQL Server on home-server or a local one).
+7. E2E verification per section 7 (two app instances against a SQL Server on the LAN or a local Docker one).

@@ -22,7 +22,7 @@ public partial class App : Application
         _window.Activate();
     }
 
-    /// <summary>Everything (config, logs) lives next to the exe, so the folder must be writable (NFR-8).</summary>
+    /// <summary>The config lives next to the exe, so the folder must be writable (NFR-8).</summary>
     private static string? CheckWritable(string folder)
     {
         try

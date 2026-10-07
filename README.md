@@ -17,7 +17,7 @@ Drop a file on one machine, press **Accept** on the other, pick a folder. The fi
 - Either side can send; one file at a time; accept / reject on the receiving side; cancel from either side
 - Presence via a 1-second heartbeat in the DB; a peer is considered gone after 5 seconds of silence (configurable)
 - Everything is removed from the DB after a successful transfer; abandoned transfers expire after 24 hours
-- **Portable:** config and everything else live next to the exe, nothing is written to the registry, `%APPDATA%` or `%TEMP%`
+- **Portable:** config and window position live next to the exe; the app itself uses no registry, `%APPDATA%` or `%TEMP%` (only Windows' own file pickers remember recently used folders)
 
 ## Screenshots
 
@@ -140,13 +140,13 @@ Not covered: key stretching (use the generated random User ID, not a short typed
 Integration tests run against a real SQL Server in Docker.
 
 ```powershell
-./tools/start-test-db.ps1      # starts SQL Server 2022 in Docker on 127.0.0.1:14333 (throwaway test credentials)
+./tools/start-test-db.ps1      # SQL Server 2022 in Docker, reachable on 127.0.0.1:14333 only (throwaway, public test credentials)
 dotnet test
 ```
 
 The script only needs the `docker` command; it creates the container on the first run, reuses it later, and waits until SQL Server accepts logins (`-Name`, `-Port` and `-Password` are optional; `-Remove` deletes the container). The tests create their own `SqlDropTest` database. To use another server, set the `SQLDROP_TEST_CONN` environment variable to a connection string. Covered: crypto round trips and tampering, peer detection and loss, channel-busy, full transfer with hash comparison, reject, cancel, size limit, corrupted chunk, TTL expiry.
 
-`tools/PeerCli` is a headless dev peer (`PeerCli <connString> <userId> send <file> | listen`) for manually testing the real app against a scripted counterpart.
+`tools/PeerCli` is a headless dev peer for manually testing the real app against a scripted counterpart: set the `SQLDROP_CONN` environment variable to a connection string (so the password never lands in the command line), then run `PeerCli <userId> send <file>` or `PeerCli <userId> listen`.
 
 ## Repository layout
 
