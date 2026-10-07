@@ -192,7 +192,7 @@ public sealed partial class MainWindow : Window
     {
         var ready = session?.Connection == ConnectionState.Connected;
         DropZone.Opacity = ready ? 1.0 : 0.6;
-        IdleIcon.Glyph = ready ? "" : "";
+        IdleIcon.Glyph = ready ? "\uE898" : "\uE7BA"; // Segoe Fluent: upload / warning
 
         IdleText.Text = _message
             ?? (session is null ? "Open settings to configure"

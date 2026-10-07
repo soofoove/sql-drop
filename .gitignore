@@ -4,3 +4,6 @@ obj/
 *.user
 publish/
 .vscode/
+# runtime config of a running app (holds the connection string and User ID)
+config.json
+logs/

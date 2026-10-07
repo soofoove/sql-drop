@@ -1,0 +1,4 @@
+# Normalize line endings in the repo; checkout follows the platform.
+* text=auto
+*.png binary
+*.sln text eol=crlf
