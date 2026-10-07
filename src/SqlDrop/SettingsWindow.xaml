@@ -5,7 +5,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="SqlDrop settings">
 
-    <StackPanel Padding="20" Spacing="14">
+    <Grid>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Grid x:Name="AppTitleBar" Height="32">
+        <TextBlock Text="SqlDrop settings" FontSize="12" VerticalAlignment="Center" Margin="12,0,0,0"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+    </Grid>
+
+    <StackPanel Grid.Row="1" Padding="20,4,20,20" Spacing="14">
         <StackPanel Spacing="4">
             <TextBlock Text="Connection string" />
             <TextBox x:Name="ConnectionBox" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72"
@@ -38,4 +49,5 @@
             <Button Content="Cancel" Click="Cancel_Click" />
         </StackPanel>
     </StackPanel>
+    </Grid>
 </Window>

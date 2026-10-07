@@ -46,6 +46,8 @@ public sealed partial class MainWindow : Window
 
         InitializeComponent();
         SystemBackdrop = new MicaBackdrop();
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
         SetUpWindow();
         Closed += OnClosed;
 

@@ -22,10 +22,12 @@ public sealed partial class SettingsWindow : Window
 
         InitializeComponent();
         SystemBackdrop = new Microsoft.UI.Xaml.Media.MicaBackdrop();
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
 
         var hwnd = WindowNative.GetWindowHandle(this);
         var scale = GetDpiForWindow(hwnd) / 96.0;
-        AppWindow.ResizeClient(new SizeInt32((int)(460 * scale), (int)(440 * scale)));
+        AppWindow.ResizeClient(new SizeInt32((int)(460 * scale), (int)(400 * scale)));
         if (AppWindow.Presenter is OverlappedPresenter presenter)
         {
             presenter.IsResizable = false;
