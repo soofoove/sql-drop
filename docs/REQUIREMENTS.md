@@ -63,7 +63,7 @@ A utility for transferring files between two machines of the same user through a
 ## 4. Data model (draft)
 
 ```sql
--- Actual table names carry a `SqlDrop_` prefix (SqlDrop_Peers, SqlDrop_Transfers, SqlDrop_TransferChunks, SqlDrop_SchemaInfo).
+-- Actual table names carry a `SqlDrop_` prefix (SqlDrop_Peers, SqlDrop_Transfers, SqlDrop_TransferChunks).
 Peers(
   ChannelId   binary(32)   not null,   -- SHA-256(userId)
   InstanceId  uniqueidentifier not null,
@@ -90,7 +90,7 @@ TransferChunks(
 ```
 
 - There is no separate channels table; a channel is just a `ChannelId` value present in each table.
-- The schema is created by the app idempotently on first connection (`IF OBJECT_ID(...) IS NULL CREATE TABLE ...`). The schema version is kept in a service table `SchemaInfo` for future migrations.
+- The schema is created by the app idempotently on first connection (`IF OBJECT_ID(...) IS NULL CREATE TABLE ...`). There is no schema version table: all data is transient (removed after each transfer), so there is nothing to migrate.
 - Tables are shared by all users of the DB; isolation is by `ChannelId`.
 
 ## 5. Encryption and security

@@ -9,12 +9,6 @@ public sealed class SqlDropDb(string connectionString, int commandTimeoutSeconds
     private const string Active = "(1, 2, 3)";
 
     private const string SchemaSql = """
-        IF OBJECT_ID('dbo.SqlDrop_SchemaInfo') IS NULL
-        BEGIN
-            CREATE TABLE dbo.SqlDrop_SchemaInfo (Version int NOT NULL);
-            INSERT INTO dbo.SqlDrop_SchemaInfo (Version) VALUES (1);
-        END;
-
         IF OBJECT_ID('dbo.SqlDrop_Peers') IS NULL
             CREATE TABLE dbo.SqlDrop_Peers (
                 ChannelId  binary(32)       NOT NULL,

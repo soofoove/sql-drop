@@ -82,7 +82,7 @@ The app is *framework-dependent*, not self-contained, so the runtimes above must
 1. Create an empty database (any name), e.g. `SqlDrop`.
 2. Use a SQL login/user with permission to `CREATE TABLE` and `SELECT/INSERT/UPDATE/DELETE` in it.
 3. The app creates its tables automatically on first connection (idempotent):
-   `SqlDrop_SchemaInfo`, `SqlDrop_Peers`, `SqlDrop_Transfers`, `SqlDrop_TransferChunks`.
+   `SqlDrop_Peers`, `SqlDrop_Transfers`, `SqlDrop_TransferChunks`.
 
 Files up to 100 MB are stored in `varbinary(max)` while in transit, so a database with the **SIMPLE** recovery model avoids transaction-log growth.
 
