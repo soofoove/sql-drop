@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Security.Cryptography;
 
 namespace SqlDrop.Core;
@@ -13,7 +14,7 @@ public sealed class SqlDropSession : IAsyncDisposable
     private readonly Guid _instanceId;
     private readonly SessionOptions _options;
     private readonly CancellationTokenSource _cts = new();
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, (string Name, long Size)> _metaCache = [];
+    private readonly ConcurrentDictionary<Guid, (string Name, long Size)> _metaCache = [];
 
     private Task? _loop;
     private int _disposed;
