@@ -39,6 +39,19 @@
 
         <ToggleSwitch x:Name="TopmostSwitch" Header="Always on top" OnContent="On" OffContent="Off" />
 
+        <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <NumberBox x:Name="PeerTimeoutBox" Header="Peer timeout (s)" Minimum="2" Maximum="300"
+                       SmallChange="1" LargeChange="5" SpinButtonPlacementMode="Compact"
+                       ToolTipService.ToolTip="How long the other device may be silent before it counts as gone. Raise on an unstable network." />
+            <NumberBox x:Name="CommandTimeoutBox" Grid.Column="1" Header="SQL command timeout (s)" Minimum="5" Maximum="600"
+                       SmallChange="5" LargeChange="30" SpinButtonPlacementMode="Compact"
+                       ToolTipService.ToolTip="Timeout of every SQL command, including each 1 MB chunk. Raise on a slow connection." />
+        </Grid>
+
         <StackPanel Orientation="Horizontal" Spacing="12">
             <Button x:Name="TestButton" Content="Test connection" Click="Test_Click" />
             <TextBlock x:Name="TestResult" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="260" />

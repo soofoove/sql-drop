@@ -27,7 +27,7 @@ public sealed partial class SettingsWindow : Window
 
         var hwnd = WindowNative.GetWindowHandle(this);
         var scale = GetDpiForWindow(hwnd) / 96.0;
-        AppWindow.ResizeClient(new SizeInt32((int)(460 * scale), (int)(400 * scale)));
+        AppWindow.ResizeClient(new SizeInt32((int)(460 * scale), (int)(420 * scale)));
         if (AppWindow.Presenter is OverlappedPresenter presenter)
         {
             presenter.IsResizable = false;
@@ -37,6 +37,11 @@ public sealed partial class SettingsWindow : Window
         ConnectionBox.Text = config.ConnectionString;
         UserIdBox.Text = config.UserId;
         TopmostSwitch.IsOn = config.AlwaysOnTop;
+
+        // Show the effective (validated) values, so an invalid number in config.json displays as what will actually be used.
+        var options = SessionOptions.FromConfig(config);
+        PeerTimeoutBox.Value = options.PeerTimeout.TotalSeconds;
+        CommandTimeoutBox.Value = options.CommandTimeout.TotalSeconds;
     }
 
     [DllImport("user32.dll")]
@@ -77,10 +82,16 @@ public sealed partial class SettingsWindow : Window
         _config.ConnectionString = ConnectionBox.Text.Trim();
         _config.UserId = UserIdBox.Text.Trim();
         _config.AlwaysOnTop = TopmostSwitch.IsOn;
+        _config.PeerTimeoutSeconds = ToSeconds(PeerTimeoutBox.Value, _config.PeerTimeoutSeconds);
+        _config.CommandTimeoutSeconds = ToSeconds(CommandTimeoutBox.Value, _config.CommandTimeoutSeconds);
         _store.Save(_config);
         _main.ApplyConfig(_config);
         Close();
     }
 
     private void Cancel_Click(object sender, RoutedEventArgs e) => Close();
+
+    /// <summary>NumberBox yields NaN when the field is empty or invalid; keep the previous value then.</summary>
+    private static int ToSeconds(double value, int fallback) =>
+        double.IsNaN(value) ? fallback : (int)Math.Round(value);
 }
