@@ -144,7 +144,7 @@ Integration tests run against a real SQL Server in Docker.
 dotnet test
 ```
 
-The script only needs the `docker` command; it creates the container on the first run, reuses it later, and waits until SQL Server accepts logins (`-Name`, `-Port` and `-Password` are optional; `-Remove` deletes the container). The tests create their own `SqlDropTest` database. To use another server, set the `SQLDROP_TEST_CONN` environment variable to a connection string. Covered: crypto round trips and tampering, peer detection and loss, channel-busy, full transfer with hash comparison, reject, cancel, size limit, corrupted chunk, TTL expiry.
+The script only needs the `docker` command; it creates the container on the first run, reuses it later, and waits until SQL Server accepts logins (`-Name`, `-Port` and `-Password` are optional; `-Remove` deletes the container). The script also creates an empty `SqlDropTest` database and prints a ready-to-use connection string, so you can paste it into the SqlDrop settings window to try the app locally (the app creates its tables, but not the database). The tests use the same database. To use another server, set the `SQLDROP_TEST_CONN` environment variable to a connection string. Covered: crypto round trips and tampering, peer detection and loss, channel-busy, full transfer with hash comparison, reject, cancel, size limit, corrupted chunk, TTL expiry.
 
 `tools/PeerCli` is a headless dev peer for manually testing the real app against a scripted counterpart: set the `SQLDROP_CONN` environment variable to a connection string (so the password never lands in the command line), then run `PeerCli <userId> send <file>` or `PeerCli <userId> listen`.
 

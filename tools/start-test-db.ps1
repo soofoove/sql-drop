@@ -6,6 +6,8 @@
     Requires Docker (the `docker` command on PATH). The credentials are test-only and match the
     default connection string used by tests/SqlDrop.Tests. The container is created on first run
     and simply started on later runs; data lives inside the container, so it is disposable.
+    The script also creates an empty database, so the printed connection string can be pasted
+    straight into the SqlDrop settings window (the app creates its tables, but not the database).
 
 .PARAMETER Name
     Container name. Default: sqldrop-test-db
@@ -16,6 +18,9 @@
 .PARAMETER Password
     SA password (must satisfy SQL Server's complexity rules). Default: the one the tests expect.
     If you change it (or the port), set SQLDROP_TEST_CONN for `dotnet test` accordingly.
+
+.PARAMETER Database
+    Name of the empty database to create (letters, digits and underscores). Default: SqlDropTest
 
 .PARAMETER Remove
     Remove the container instead of starting it.
@@ -29,6 +34,8 @@ param(
     [string]$Name = 'sqldrop-test-db',
     [int]$Port = 14333,
     [string]$Password = 'SqlDrop_Test_123!',
+    [ValidatePattern('^[A-Za-z_][A-Za-z0-9_]*$')]
+    [string]$Database = 'SqlDropTest',
     [switch]$Remove
 )
 
@@ -80,6 +87,10 @@ if (-not $ready) {
     throw "SQL Server did not become ready in time. Check: docker logs $Name"
 }
 
+# SqlDrop creates its tables itself but needs the database to exist; creating it here is idempotent.
+docker exec $Name /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P $Password -C -b -Q "IF DB_ID(N'$Database') IS NULL CREATE DATABASE [$Database]" | Out-Null
+if ($LASTEXITCODE -ne 0) { throw "Could not create database '$Database'. Check: docker logs $Name" }
+
 Write-Host 'Ready.'
 # 127.0.0.1 rather than localhost: localhost may resolve to IPv6 first, which Docker's port forwarding doesn't serve reliably.
-Write-Host "Connection string: Server=127.0.0.1,$Port;Database=SqlDropTest;User Id=sa;Password=$Password;TrustServerCertificate=True"
+Write-Host "Connection string: Server=127.0.0.1,$Port;Database=$Database;User Id=sa;Password=$Password;TrustServerCertificate=True"
