@@ -4,6 +4,10 @@ A tiny portable Windows utility for moving a file between two of your machines t
 
 Drop a file on one machine, press **Accept** on the other, pick a folder. The file travels encrypted, and nothing is left in the database afterwards.
 
+<p align="center">
+  <img src="docs/screenshots/hero-transfer.png" alt="Two SqlDrop windows: the sender waiting for the file to be accepted, the receiver showing an incoming file with Accept and Reject buttons" width="760">
+</p>
+
 ## Features
 
 - Small, fixed-size WinUI 3 window with drag-and-drop (or click to choose a file)
@@ -14,6 +18,27 @@ Drop a file on one machine, press **Accept** on the other, pick a folder. The fi
 - Presence via a 1-second heartbeat in the DB; a peer is considered gone after 5 seconds of silence (configurable)
 - Everything is removed from the DB after a successful transfer; abandoned transfers expire after 24 hours
 - **Portable:** config and everything else live next to the exe, nothing is written to the registry, `%APPDATA%` or `%TEMP%`
+
+## Screenshots
+
+The main states of the window (Windows 11, dark theme; the window follows the system light/dark setting).
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/main-not-configured.png" alt="Not configured"><br><b>Not configured</b><br>First start: open the gear and enter the connection string and User ID.</td>
+    <td align="center" width="33%"><img src="docs/screenshots/main-waiting.png" alt="Waiting for peer"><br><b>Waiting for peer</b><br>Connected to the DB, the other device isn't online yet.</td>
+    <td align="center" width="33%"><img src="docs/screenshots/main-connected.png" alt="Connected"><br><b>Connected</b><br>Both devices see each other. Drop a file or click to choose one.</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/main-sending.png" alt="Sender waiting for acceptance"><br><b>Sending</b><br>File uploaded; waiting for the other device to accept.</td>
+    <td align="center"><img src="docs/screenshots/main-incoming.png" alt="Incoming file"><br><b>Incoming file</b><br>The other device offers a file: Accept (and choose a folder) or Reject.</td>
+    <td align="center"><img src="docs/screenshots/main-receiving.png" alt="Receiving with progress bar"><br><b>Receiving</b><br>Chunks are downloaded and decrypted; either side can cancel.</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/main-done.png" alt="Transfer done"><br><b>Done</b><br>The file is saved and the transfer is removed from the database.</td>
+    <td align="center" colspan="2"><img src="docs/screenshots/settings.png" alt="Settings window" width="420"><br><b>Settings</b><br>Connection string, User ID (generate / copy), always-on-top and a connection test that also creates the tables. (Values shown are placeholders.)</td>
+  </tr>
+</table>
 
 ## How it works
 
