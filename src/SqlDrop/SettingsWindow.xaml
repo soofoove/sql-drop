@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="SqlDrop.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="SqlDrop settings">
+
+    <StackPanel Padding="20" Spacing="14">
+        <StackPanel Spacing="4">
+            <TextBlock Text="Connection string" />
+            <TextBox x:Name="ConnectionBox" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72"
+                     PlaceholderText="Server=...;Database=...;User Id=...;Password=...;TrustServerCertificate=True" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="User ID (same on both machines)" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="UserIdBox" />
+                <Button Grid.Column="1" Content="Generate" Click="Generate_Click" />
+                <Button Grid.Column="2" Content="Copy" Click="Copy_Click" />
+            </Grid>
+        </StackPanel>
+
+        <ToggleSwitch x:Name="TopmostSwitch" Header="Always on top" OnContent="On" OffContent="Off" />
+
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button x:Name="TestButton" Content="Test connection" Click="Test_Click" />
+            <TextBlock x:Name="TestResult" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="260" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+            <Button Content="Save" Style="{StaticResource AccentButtonStyle}" Click="Save_Click" />
+            <Button Content="Cancel" Click="Cancel_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
